@@ -51,11 +51,13 @@ function downloadFile($filename) {
 		header('Content-Disposition: attachment; filename=' . generateRandomString(FILE_NAME_LEN) . '.exe');
 		header('Content-Length: ' . filesize($filename));
 
+		flush();
+		
 		$f = fopen($filename, 'r');
 
 		while (!feof($f)) {
-			flush();
 			print fread($f, round(DOWNLOAD_RATE * 1024));
+			flush();
 
 			sleep(1);
 		}
