@@ -41,10 +41,11 @@ function downloadFile($filename) {
 			throw new Exception('File ' . $filename . ' is not valid');
 		}
 
-		header('Cache-Control: private');
+		header('Content-Description: File Transfer');
 		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename=' . generateRandomString(FILE_NAME_LEN) . '.exe');
 		header('Content-Length: ' . filesize($filename));
-		header('Content-Disposition: filename=' . generateRandomString(FILE_NAME_LEN) . '.exe');
+		header('Cache-Control: private');
 
 		flush();
 
