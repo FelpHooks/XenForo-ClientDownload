@@ -1,5 +1,6 @@
 <?php
 
+// XenForo only supports PHP 7 or newer
 $phpVersion = phpversion();
 if (version_compare($phpVersion, '7.0.0', '<')) {
 	die("PHP 7.0.0 or newer is required. $phpVersion does not meet this requirement. Please ask your host to upgrade PHP.");
@@ -9,7 +10,7 @@ if (version_compare($phpVersion, '7.0.0', '<')) {
 const MY_DOMAIN = 'https://felphooks.com/';
 
 // Name of the file to download
-// NOTE: Remember to block directory access on your Apache/Nginx
+// NOTE: Remember to block directory access on your Apache/Nginx (or whatever webserver you are using)
 const FILE_NAME = '<Your Cheat Client Path Here>';
 
 // Number of characters the random string must have
@@ -18,7 +19,7 @@ const FILE_NAME_LEN = 16;
 // 4000 * 1024, Approx. 4MB/second
 const DOWNLOAD_RATE = 4000;
 
-function getRandomString($n) {
+function generateRandomString($n) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $randomString = '';
 
@@ -31,23 +32,39 @@ function getRandomString($n) {
 }
 
 function downloadFile($filename) {
-	header('Cache-Control: private');
-	header('Content-Type: application/octet-stream');
-	header('Content-Length: ' . filesize($filename));
-	header('Content-Disposition: filename=' . getRandomString(FILE_NAME_LEN) . '.exe');
+	try {
+		if (!file_exists($filename)) {
+			throw new Exception('File ' . $filename . ' does not exist');
+		}
 
-	flush();
+		if (!is_file($filename)) {
+			throw new Exception('File ' . $filename . ' is not valid');
+		}
 
-	$f = fopen($filename, 'r');
+		header('Cache-Control: private');
+		header('Content-Type: application/octet-stream');
+		header('Content-Length: ' . filesize($filename));
+		header('Content-Disposition: filename=' . generateRandomString(FILE_NAME_LEN) . '.exe');
 
-	while (!feof($f)) {
-		print fread($f, round(DOWNLOAD_RATE * 1024));
 		flush();
 
-		sleep(1);
-	}
+		$f = fopen($filename, 'r');
 
-	fclose($f);
+		while (!feof($f)) {
+			print fread($f, round(DOWNLOAD_RATE * 1024));
+			flush();
+
+			sleep(1);
+		}
+	} catch (\Throwable $e) {
+		echo $e->getMessage();
+	} finally {
+		if ($f) {
+			fclose($f);
+		}
+
+		exit();
+	}
 }
 
 function redirect($url) {
@@ -72,7 +89,7 @@ if (!$user_id) {
 	redirect(MY_DOMAIN);
 }
 
-// User is banned, redirect them to main page and he deals with the support
+// User is banned, redirect them to main page and let him deal with the support
 $isBanned = $visitor['is_banned'];
 if ($isBanned) {
 	redirect(MY_DOMAIN);
