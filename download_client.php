@@ -9,7 +9,7 @@ if (version_compare($phpVersion, '7.0.0', '<')) {
 // PHP will redirect to this address in case the user does not have permissions, etc.
 const RETURN_ADDRESS = 'https://felphooks.com';
 
-// Path of the Client Binary to download
+// Path of the Client to download
 // NOTE: Remember to block directory access on your Apache/Nginx (or whatever webserver you are using)
 const FILE_NAME = '<Your Cheat Client Path Here>';
 
@@ -20,7 +20,7 @@ const FILE_NAME_LEN = 16;
  * Maximum download speed per second: 200 * 1024, Approx. 200KB/second;
  * Change accordingly to your hosting and file size
  * TODO: Might want to Add some Request Rate Limiting/minute, in case the user spams calls to this PHP?
-*/
+ */
 const DOWNLOAD_RATE = 200;
 
 function generateRandomString($n) {
@@ -101,6 +101,7 @@ if ($isBanned) {
 }
 
 $secondaryGroupIds = $visitor['secondary_group_ids'];
+
 $isCustomer = in_array(5, $secondaryGroupIds);
 $isBetaTester = in_array(6, $secondaryGroupIds);
 $isDeveloper = in_array(7, $secondaryGroupIds);
@@ -110,7 +111,6 @@ $isStaff = $visitor['is_staff'];
 $isAdmin = $visitor['is_admin'];
 
 $canDownload = $isCustomer || $isBetaTester || $isDeveloper || $isModerator || $isStaff || $isAdmin;
-
 if ($canDownload) {
 	downloadFile(FILE_NAME);
 } else {
