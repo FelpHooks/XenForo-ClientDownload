@@ -1,16 +1,19 @@
 <?php
 
-// XenForo only supports PHP 7 or newer
+/*
+ * XenForo (At least in Version 2) only supports PHP 7 or newer
+ * Information source: index.php/Forum Documentation
+ */
 $phpVersion = phpversion();
 if (version_compare($phpVersion, '7.0.0', '<')) {
 	die("PHP 7.0.0 or newer is required. $phpVersion does not meet this requirement. Please ask your host to upgrade PHP.");
 }
 
-// PHP will redirect to this address in case the user does not have permissions, etc.
+// Visitor will be redirected to this address in case the user does not have permissions, etc.
 const RETURN_ADDRESS = 'https://felphooks.com';
 
-// Path of the Client to download
-// NOTE: Remember to block directory access on your Apache/Nginx (or whatever webserver you are using)
+// Path of the executable to download
+// NOTE: Remember to block it's access on your Apache/Nginx (or whatever webserver you are using)
 const FILE_NAME = '<Your Cheat Client Path Here>';
 
 // Number of characters the randomly generated filename must have
@@ -27,7 +30,7 @@ function generateRandomString($n) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $randomString = '';
 
-    for ($i = 0; $i < $n; $i++) {
+    for ($i = 0; $i < $n; ++$i) {
         $index = rand(0, strlen($characters) - 1);
         $randomString .= $characters[$index];
     }
@@ -52,7 +55,7 @@ function downloadFile($filename) {
 		header('Content-Length: ' . filesize($filename));
 
 		flush();
-		
+
 		$f = fopen($filename, 'r');
 
 		while (!feof($f)) {
@@ -63,7 +66,7 @@ function downloadFile($filename) {
 		}
 	} catch (\Throwable $e) {
 		error_log($e->getMessage());
-        } finally {
+	} finally {
 		if ($f) {
 			fclose($f);
 		}
@@ -101,7 +104,15 @@ if ($isBanned) {
 }
 
 $secondaryGroupIds = $visitor['secondary_group_ids'];
+if (!$secondaryGroupIds) {
+	redirect(RETURN_ADDRESS);
+}
 
+/*
+ * These are custom user groups, you can create them in the XenForo Admin panel
+ * remember to create them in the index order (Customers first, then Beta Testers, and so on)
+ * (You can change these numbers here too)
+ */
 $isCustomer = in_array(5, $secondaryGroupIds);
 $isBetaTester = in_array(6, $secondaryGroupIds);
 $isDeveloper = in_array(7, $secondaryGroupIds);
