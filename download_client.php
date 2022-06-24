@@ -13,13 +13,13 @@ const RETURN_ADDRESS = 'https://felphooks.com';
 // NOTE: Remember to block directory access on your Apache/Nginx (or whatever webserver you are using)
 const FILE_NAME = '<Your Cheat Client Path Here>';
 
-// Number of characters the randomly generated file name must have
+// Number of characters the randomly generated filename must have
 const FILE_NAME_LEN = 16;
 
 /*
- * Maximum download speed per second: 200 * 1024, Approx. 200KB/second;
+ * Max download speed/second: 200 * 1024, Approx. 200KB/second;
  * Change accordingly to your hosting and file size
- * TODO: Might want to Add some Request Rate Limiting/minute, in case the user spams calls to this PHP?
+ * TODO: Add some Request Rate Limiting/minute, in case the user spams calls to this PHP?
  */
 const DOWNLOAD_RATE = 200;
 
@@ -62,8 +62,8 @@ function downloadFile($filename) {
 			sleep(1);
 		}
 	} catch (\Throwable $e) {
-		echo $e->getMessage();
-	} finally {
+		error_log($e->getMessage());
+        } finally {
 		if ($f) {
 			fclose($f);
 		}
