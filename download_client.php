@@ -2,18 +2,18 @@
 
 /*
  * XenForo (At least in Version 2) only supports PHP 7 or newer
- * Information source: index.php/Forum Documentation
+ * Information src: index.php/XenForo Documentation
  */
 $phpVersion = phpversion();
 if (version_compare($phpVersion, '7.0.0', '<')) {
 	die("PHP 7.0.0 or newer is required. $phpVersion does not meet this requirement. Please ask your host to upgrade PHP.");
 }
 
-// Visitor will be redirected to this address in case the user does not have permissions, etc.
+// Visitor will be redirected to this address (in case the user does not have permissions, etc.)
 const RETURN_ADDRESS = 'https://felphooks.com';
 
 // Path of the executable to download
-// NOTE: Remember to block it's access on your Apache/Nginx (or whatever webserver you are using)
+// NOTE: Remember to block it's access on your Apache/Nginx (or whatever webserver you are using for whatever reason you are using)
 const FILE_NAME = '<Your Cheat Client Path Here>';
 
 // Number of characters the randomly generated filename must have
@@ -26,11 +26,11 @@ const FILE_NAME_LEN = 16;
  */
 const DOWNLOAD_RATE = 200;
 
-function generateRandomString($n) {
+function generateRandomString($len) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $randomString = '';
 
-    for ($i = 0; $i < $n; ++$i) {
+    for ($i = 0; $i < $len; ++$i) {
         $index = rand(0, strlen($characters) - 1);
         $randomString .= $characters[$index];
     }
@@ -65,7 +65,9 @@ function downloadFile($filename) {
 			sleep(1);
 		}
 	} catch (\Throwable $e) {
+		// Log any errors to PHP error_log file
 		error_log($e->getMessage());
+		die();
 	} finally {
 		if ($f) {
 			fclose($f);
