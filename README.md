@@ -22,7 +22,7 @@ wget <Raw/URL/To/download_client.php>
 curl -O <Raw/URL/To/download_client.php>
 ```
 
-Open the downloaded file in your preferred text editor and modify the constants RETURN_ADDRESS, FILE_NAME, FILE_NAME_LEN and DOWNLOAD_RATE to your preference.
+Open the downloaded PHP file in your preferred text editor and modify the constants RETURN_ADDRESS, FILE_NAME, FILE_NAME_LEN and DOWNLOAD_RATE to your preference.
 
 Then move download_client.php to your WebServer directory:
 
