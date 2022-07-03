@@ -6,13 +6,13 @@ A simple PHP Script for Cheat Providers that use XenForo as their Forum Software
 
 ## Installation
 
-Clone the repository using
+Clone the repository using:
 
 ```bash
 git clone https://github.com/FelpHooks/XenForo-ClientDownload
 ```
 
-Or download the script only, by using cURL or Wget and specifying the raw file URL
+Or download the script only, by using cURL or Wget and specifying the raw file URL:
 
 ```bash
 wget <Raw/URL/To/download_client.php>
