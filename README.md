@@ -6,7 +6,7 @@ A simple PHP Script for Cheat Providers that use XenForo as their Forum Software
 
 ## Installation
 
-Clone the repository using:
+Clone the repository using
 
 ```bash
 git clone https://github.com/FelpHooks/XenForo-ClientDownload
@@ -17,12 +17,14 @@ Or download the script only, by using cURL or Wget and specifying the raw file U
 ```bash
 wget <Raw/URL/To/download_client.php>
 
+# or
+
 curl -O <Raw/URL/To/download_client.php>
 ```
 
-Modify the constants RETURN_ADDRESS, FILE_NAME, FILE_NAME_LEN and DOWNLOAD_RATE to your preference.
+Open the downloaded file in your preferred text editor and modify the constants RETURN_ADDRESS, FILE_NAME, FILE_NAME_LEN and DOWNLOAD_RATE to your preference.
 
-Then move the file download_client.php to your WebServer directory:
+Then move download_client.php to your WebServer directory:
 
 ```bash
 sudo mv download_client.php /var/www/html/
@@ -32,8 +34,8 @@ sudo mv download_client.php /var/www/html/
 
 On your Download page:
 
-```php
-<form action="download_client.php">
+```html
+<form action="/download_client.php" method="post">
     <center>
         <button type="submit">Download Client</button>
     </center>
