@@ -420,9 +420,7 @@ function downloadFile($filename) {
 }
 
 function redirect($url) {
-	ob_start();
 	header('Location: ' . $url);
-	ob_end_flush();
 	die();
 }
 
@@ -434,6 +432,12 @@ $app = \XF::setupApp('XF\Pub\App');
 $app->start();
 
 $visitor = \XF::visitor();
+
+// Just because of my safety paranoia
+if (!$visitor) {
+	redirect(RETURN_ADDRESS);
+}
+
 $user_id = $visitor['user_id'];
 
 // Visitor is not logged in
